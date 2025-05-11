@@ -154,7 +154,7 @@ fun ChatbotScreen(navController: NavController, autoMsg: String? = null) {
 }
 
 suspend fun askGemini(userMsg: String): String {
-    val apiKey = "api_key"
+    val apiKey = "AIzaSyC9cZE9IW6kpGtfAT2nBdGza9jfwoac0YE"
     val url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey"
     val client = OkHttpClient.Builder()
     .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)

@@ -3,23 +3,50 @@ package com.example.security_connect_app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.security_connect_app.navigation.AppNavigation
-import com.example.security_connect_app.ui.theme.SecurityConnectAppTheme
+import androidx.navigation.navArgument
+import com.example.security_connect_app.screens.ChatbotScreen
+import com.example.security_connect_app.screens.LoginScreen
+import com.example.security_connect_app.screens.ValidationScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SecurityConnectAppTheme {
-                val navController = rememberNavController()
-                var isLoggedIn by rememberSaveable { mutableStateOf(false) }
-
-                AppNavigation(navController, isLoggedIn) { isLoggedIn = true }
+            val navController = rememberNavController()
+            MaterialTheme {
+                Surface {
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable("login") {
+                            LoginScreen(onLoginSuccess = {
+                                navController.navigate("validation") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            })
+                        }
+                        composable("validation") {
+                            ValidationScreen(navController = navController)
+                        }
+                        composable(
+                            "chatbot?autoMsg={autoMsg}",
+                            arguments = listOf(
+                                navArgument("autoMsg") {
+                                    type = NavType.StringType
+                                    nullable = true
+                                    defaultValue = null
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val autoMsg = backStackEntry.arguments?.getString("autoMsg")
+                            ChatbotScreen(navController = navController, autoMsg = autoMsg)
+                        }
+                    }
+                }
             }
         }
     }
