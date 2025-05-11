@@ -3,7 +3,15 @@ package com.example.security_connect_app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.security_connect_app.screens.ChatbotScreen
+import com.example.security_connect_app.screens.LoginScreen
 import com.example.security_connect_app.screens.ValidationScreen
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +19,35 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            ValidationScreen(navController = navController)
+            MaterialTheme {
+                Surface {
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable("login") {
+                            LoginScreen(onLoginSuccess = {
+                                navController.navigate("validation") {
+                                    popUpTo("login") { inclusive = true }
+                                }
+                            })
+                        }
+                        composable("validation") {
+                            ValidationScreen(navController = navController)
+                        }
+                        composable(
+                            "chatbot?autoMsg={autoMsg}",
+                            arguments = listOf(
+                                navArgument("autoMsg") {
+                                    type = NavType.StringType
+                                    nullable = true
+                                    defaultValue = null
+                                }
+                            )
+                        ) { backStackEntry ->
+                            val autoMsg = backStackEntry.arguments?.getString("autoMsg")
+                            ChatbotScreen(navController = navController, autoMsg = autoMsg)
+                        }
+                    }
+                }
+            }
         }
     }
 }
