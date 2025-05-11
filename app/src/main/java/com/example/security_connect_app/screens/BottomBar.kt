@@ -14,32 +14,44 @@ import androidx.navigation.NavController
 
 @Composable
 fun BottomBar(navController: NavController, current: String) {
-    BottomAppBar(
-        containerColor = Color.DarkGray,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(64.dp)
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        NavigationBarItem(
-            selected = current == "validation",
-            onClick = { if (current != "validation") navController.navigate("validation") },
-            icon = {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.Shield, contentDescription = "Validação", tint = Color.White)
-                    Text("Validação", color = Color.White, style = MaterialTheme.typography.labelSmall)
+        BottomAppBar(
+            containerColor = Color.DarkGray,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+        ) {
+            NavigationBarItem(
+                selected = current == "validation",
+                onClick = { if (current != "validation") navController.navigate("validation") },
+                icon = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Default.Shield, contentDescription = "Validação", tint = Color.White)
+                        Text("Validação", color = Color.White, style = MaterialTheme.typography.labelSmall)
+                    }
                 }
-            }
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        NavigationBarItem(
-            selected = current == "chatbot",
-            onClick = { if (current != "chatbot") navController.navigate("chatbot?autoMsg=") },
-            icon = {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.ChatBubble, contentDescription = "Chatbot", tint = Color.White)
-                    Text("Chatbot", color = Color.White, style = MaterialTheme.typography.labelSmall)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            NavigationBarItem(
+                selected = current == "chatbot",
+                onClick = { if (current != "chatbot") navController.navigate("chatbot?autoMsg=") },
+                icon = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Default.ChatBubble, contentDescription = "Chatbot", tint = Color.White)
+                        Text("Chatbot", color = Color.White, style = MaterialTheme.typography.labelSmall)
+                    }
                 }
-            }
+            )
+        }
+        Text(
+            "Desenvolvido por Gabriel Gramacho, Mikael Palmeira, Gabriel Araujo e Kauã Granata • 2025",
+            color = Color.LightGray,
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier
+                .padding(top = 4.dp, bottom = 8.dp)
         )
     }
 }
